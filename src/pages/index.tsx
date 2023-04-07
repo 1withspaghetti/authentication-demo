@@ -1,5 +1,10 @@
+import Navbar from "@/components/Navbar"
+
 export default function Home() {
   return (
-    <div>TODO</div>
+    <>
+      <Navbar></Navbar>
+      TODO
+    </>
   )
 }
