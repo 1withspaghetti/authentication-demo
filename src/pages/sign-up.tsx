@@ -33,7 +33,7 @@ export default function SignUp() {
                         <FormInput ref={user} id="user" label="Username" regex={
                             {"Only letters, numbers, and underscores are allowed": /^[\w]*$/, 
                             "Must be between 3 and 24 characters": /^.{3,24}$/}} 
-                            attr={{autoComplete: "username"}}>
+                            attr={{autoComplete: "off"}}>
                         </FormInput>
                         
                         <FormInput ref={pass} id="pass" label="Password" regex={

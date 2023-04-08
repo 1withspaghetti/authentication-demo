@@ -49,7 +49,7 @@ export default class FormInput extends React.Component<Props> {
                     <label htmlFor={this.props.id}>{this.props.label}</label>
                     {this.props.children}
                 </div>
-                <input ref={this.input} type="text" id={this.props.id} name={this.props.id} {...this.props.attr} onChange={()=>this.testInput()} className={`w-64 rounded border-[3px] px-2 bg-neutral-100 dark:bg-slate-700 outline-none ${this.state.valid ? 'border-transparent focus:border-blue-500 dark:focus:border-blue-700' : 'border-red-500'}`}></input>
+                <input ref={this.input} type="text" id={this.props.id} name={this.props.id} {...this.props.attr} onChange={()=>this.testInput()} className={`w-72 rounded border-[3px] px-2 bg-neutral-100 dark:bg-slate-700 outline-none ${this.state.valid ? 'border-transparent focus:border-blue-500 dark:focus:border-blue-700' : 'border-red-500'}`}></input>
                 {!this.state.valid && <div className="w-64 text-sm text-red-500">{this.state.error}</div>}
             </div>
         )
