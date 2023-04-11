@@ -1,5 +1,6 @@
 import FormInput from "@/components/FormInput";
 import Navbar from "@/components/Navbar";
+import { SignUpValidator } from "@/types/AuthTypes";
 import Link from "next/link";
 import { FormEvent, useRef } from "react";
 
@@ -13,7 +14,7 @@ export default function SignUp() {
     function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!email.current?.testInput() || !user.current?.testInput() || !pass.current?.testInput() || !pass2.current?.testInput()) return;
-        if (pass.current.getValue() !== pass2.current.getValue()) return alert("Passwords must match");
+        if (pass.current.getValue() !== pass2.current.getValue()) return pass2.current.setState({valid: false, error: "Password must match"});
         console.log("Submit",{email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
     }
     
@@ -24,29 +25,19 @@ export default function SignUp() {
                 <div className="rounded-lg shadow-lg px-6 sm:px-16 py-4 bg-slate-200 dark:bg-slate-800">
                     <h1 className="mb-4 text-2xl font-bold text-center">Sign Up</h1>
                     <form className="flex flex-col" onSubmit={onSubmit}>
-                        <FormInput ref={email} id="email" label="Email" regex={
-                            {"Invalid email address": /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                            "Email address must be less than 256 characters": /^.{0,256}$/}} 
+                        <FormInput ref={email} id="email" label="Email" validator={SignUpValidator.email} 
                             attr={{autoComplete: "email", autoFocus: true}}>
                         </FormInput>
 
-                        <FormInput ref={user} id="user" label="Username" regex={
-                            {"Only letters, numbers, and underscores are allowed": /^[\w]*$/, 
-                            "Must be between 3 and 24 characters": /^.{3,24}$/}} 
+                        <FormInput ref={user} id="user" label="Username" validator={SignUpValidator.user}  
                             attr={{autoComplete: "off"}}>
                         </FormInput>
                         
-                        <FormInput ref={pass} id="pass" label="Password" regex={
-                            {"Only letters, numbers, and the following symbols are allowed: _-@$!%*#?&": /^[\w\-@$!%*#?&]*$/, 
-                            "Must be between 8 and 32 characters": /^.{8,32}$/,
-                            "Must contain at least 1 letter and 1 number": /^(?=.*[A-Za-z])(?=.*\d).*$/}} 
+                        <FormInput ref={pass} id="pass" label="Password" validator={SignUpValidator.pass} 
                             attr={{type: "password", autoComplete: "new-password"}}>
                         </FormInput>
 
-                        <FormInput ref={pass2} id="pass2" label="Confirm Password" regex={
-                            {"Only letters, numbers, and the following symbols are allowed: _-@$!%*#?&": /^[\w\-@$!%*#?&]*$/, 
-                            "Must be between 8 and 32 characters": /^.{8,32}$/,
-                            "Must contain at least 1 letter and 1 number": /^(?=.*[A-Za-z])(?=.*\d).*$/}} 
+                        <FormInput ref={pass2} id="pass2" label="Confirm Password" validator={SignUpValidator.pass} 
                             attr={{type: "password", autoComplete: "new-password"}}>
                         </FormInput>
                         

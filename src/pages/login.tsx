@@ -1,5 +1,6 @@
 import FormInput from "@/components/FormInput";
 import Navbar from "@/components/Navbar";
+import { LoginValidator } from "@/types/AuthTypes";
 import Link from "next/link";
 import { FormEvent, useRef } from "react";
 
@@ -21,12 +22,10 @@ export default function Login() {
                 <div className="rounded-lg shadow-lg px-6 sm:px-16 py-4 bg-slate-200 dark:bg-slate-800">
                     <h1 className="mb-4 text-2xl font-bold text-center">Login</h1>
                     <form className="flex flex-col" onSubmit={onSubmit}>
-                        <FormInput ref={user} id="user" label="Username or Email" regex={
-                            {"Invalid Username": /^.{1,256}$/}} 
+                        <FormInput ref={user} id="user" label="Username or Email" validator={LoginValidator.user} 
                             attr={{autoComplete: "username", autoFocus: true}}></FormInput>
 
-                        <FormInput ref={pass} id="pass" label="Password" regex={
-                            {"Invalid Password": /^[\w\-@$!%*#?&]{1,32}$/}} 
+                        <FormInput ref={pass} id="pass" label="Password" validator={LoginValidator.pass} 
                             attr={{type: "password", autoComplete: "current-password"}}>
                                 <Link href="/password-recovery" className="text-sm text-blue-500" style={{lineHeight: "24px"}}>Forgot Password</Link>
                         </FormInput>

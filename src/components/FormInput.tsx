@@ -1,11 +1,12 @@
 import React, { createRef, useState } from "react";
 import { InputHTMLAttributes } from "react";
+import { Schema, ValidationError } from "yup";
 
 type Props = {
     attr: InputHTMLAttributes<HTMLInputElement>, 
     id: string, 
     label: string, 
-    regex?: {[key: string]: RegExp},
+    validator?: Schema,
     children?: any
 }
 
@@ -28,14 +29,16 @@ export default class FormInput extends React.Component<Props> {
         if (!this.input.current) return false;
         const value = this.input.current.value;
 
-        if (!this.props.regex) return true;
-        for (const [msg, regex] of Object.entries(this.props.regex)) {
-            if (!regex.test(value)) {
-                this.setState({valid: false, error: msg || "Invalid Input"})
+        if (!this.props.validator) return !!value;
+        try {
+            this.props.validator.validateSync(value);
+            return true;
+        } catch (e) {
+            if (e instanceof ValidationError) {
+                this.setState({valid: false, error: e.errors[0] || "Invalid"})
                 return false;
-            }
+            } else throw e;
         }
-        return true;
     }
 
     getValue(): string {
@@ -55,17 +58,3 @@ export default class FormInput extends React.Component<Props> {
         )
     }
 }
-
-/*export default function FormInput({attr, id, label, regex, test, children}: {attr: InputHTMLAttributes<HTMLInputElement>, id: string, label: string, regex?: {[key: string]: RegExp|string}[], test: (valid: boolean)=>void, children?: any}) {
-
-
-    return (
-        <div className="mt-2">
-            <div className="flex justify-between font-semibold">
-                <label htmlFor={id}>Password</label>
-                {children}
-            </div>
-            <input type="text" id={id} name={id} {...attr} className="w-64 rounded border-[3px] px-2 border-transparent focus:border-blue-500 dark:focus:border-blue-700 bg-neutral-100 dark:bg-slate-700 outline-none"></input>
-        </div>
-    )
-}*/
