@@ -1,8 +1,9 @@
 import FormInput from "@/components/FormInput";
 import Navbar from "@/components/Navbar";
-import { SignUpValidator } from "@/types/AuthTypes";
+import { SignUpValidator } from "@/types/authValidation";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 export default function SignUp() {
 
@@ -11,11 +12,25 @@ export default function SignUp() {
     const pass = useRef<FormInput>(null);
     const pass2 = useRef<FormInput>(null);
 
+    var [error, setError] = useState<string>("");
+    var [loading, setLoading] = useState<boolean>(false);
+
     function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        if (loading) return;
+        setError("");
+
         if (!email.current?.testInput() || !user.current?.testInput() || !pass.current?.testInput() || !pass2.current?.testInput()) return;
-        if (pass.current.getValue() !== pass2.current.getValue()) return pass2.current.setState({valid: false, error: "Password must match"});
-        console.log("Submit",{email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
+        if (pass.current.getValue() !== pass2.current.getValue()) return pass2.current.setState({valid: false, error: "Passwords must match"});
+
+        setLoading(true);
+        axios.post('/api/auth/signup', {email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
+        .then((res)=>{
+            var token = res.data.token;
+            localStorage.setItem("token", token);
+        }).catch((err: AxiosError<any, any>)=>{
+            setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
+        }).finally(()=>{setLoading(false)})
     }
     
     return (
@@ -24,7 +39,7 @@ export default function SignUp() {
             <div className="w-fill flex justify-center mt-8">
                 <div className="rounded-lg shadow-lg px-6 sm:px-16 py-4 bg-slate-200 dark:bg-slate-800">
                     <h1 className="mb-4 text-2xl font-bold text-center">Sign Up</h1>
-                    <form className="flex flex-col" onSubmit={onSubmit}>
+                    <form className="flex flex-col items-center" onSubmit={onSubmit}>
                         <FormInput ref={email} id="email" label="Email" validator={SignUpValidator.email} 
                             attr={{autoComplete: "email", autoFocus: true}}>
                         </FormInput>
@@ -43,10 +58,13 @@ export default function SignUp() {
                         
                         
                         <div className="text-center mt-4">
-                            <input type="submit" value={"Continue"} className="w-min rounded-lg shadow font-semibold mx-1 px-4 py-[2px] cursor-pointer transition-all text-navy-50 bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105"></input>
+                            <input type="submit" value={"Continue"} className={`w-min rounded-lg shadow font-semibold mx-1 px-4 py-[2px] transition-all text-navy-50 ${!loading ? 'cursor-pointer bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105' : 'bg-blue-600 dark:bg-blue-800'}`}></input>
+                        </div>
+                        <div className="py-3 text-center text-red-500">
+                            { error }
                         </div>
                     </form>
-                    <div className="text-center mt-4 font-semibold">Already have an account? <Link href="/login" className="text-blue-500">Log In!</Link></div>
+                    <div className="text-center font-semibold">Already have an account? <Link href="/login" className="text-blue-500">Log In!</Link></div>
                 </div>
             </div>
         </>

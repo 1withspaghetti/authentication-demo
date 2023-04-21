@@ -2,7 +2,7 @@ import { object, string } from "yup";
 
 export const SignUpValidator = {
     email: string().required("Required")
-        .email("Invalid email address")
+        .matches(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, "Invalid email address")
         .max(256, "Max of 256 characters"),
     user: string().required("Required")
         .matches(/^[\w]*$/, "Only letters, numbers, and underscores are allowed")
@@ -17,7 +17,8 @@ export const SignUpValidator = {
 
 export const LoginValidator = {
     user: string().required("Required").test("username_or_email", "Invalid username or email", (val)=>{
-        return string().matches(/^[\w]*$/).min(3).max(24).isValidSync(val) || string().email().max(256).isValidSync(val);
+        return string().matches(/^[\w]*$/).min(3).max(24).isValidSync(val) || 
+            string().matches(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).max(256).isValidSync(val);
     }),
     pass: string().required("Required")
         .matches(/^[\w\-@$!%*#?&]{1,32}$/, "Invalid Password")
