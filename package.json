@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "keygen": "ssh-keygen -t rsa -b 2048 -m PEM -f jwt.key -q"
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/node": "18.15.11",

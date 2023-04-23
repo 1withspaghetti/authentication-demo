@@ -6,10 +6,9 @@ import { Op } from "sequelize";
 import { object } from "yup";
 import crypto from 'crypto';
 import { HttpStatusCode } from "axios";
-import jwt from 'jsonwebtoken';
-import { getJWTPrivateKey } from "@/utils/jwt-keys";
+import { AuthTokenPair, createJWTPair } from "@/utils/jwt";
 
-async function POST(req: NextApiRequest, res: NextApiResponse) {
+async function POST(req: NextApiRequest, res: NextApiResponse<AuthTokenPair>) {
     const body = await object(LoginValidator).validate(req.body);
 
     var user = await User.findOne({
@@ -30,15 +29,10 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         throw new ApiError("Invalid Password", HttpStatusCode.BadRequest);
     }
 
-    var jwtid = crypto.randomBytes(8).toString("hex");
-    var refreshJWT = jwt.sign({sub: user.id}, getJWTPrivateKey(), {algorithm: 'RS256', expiresIn: "1d", jwtid});
-    var resourceJWT = jwt.sign({sub: user.id}, getJWTPrivateKey(), {algorithm: 'RS256', expiresIn: "2.5m"});
+    var jwtId = crypto.randomBytes(8).toString("hex");
+    var tokenPair = await createJWTPair(user.id, jwtId);
     
-    
-    res.status(200).json({
-        refresh_token: refreshJWT,
-        resource_token: resourceJWT
-    });
+    res.status(200).json(tokenPair);
 }
 
 export default apiHandler({POST})

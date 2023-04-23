@@ -7,13 +7,11 @@ export default function ThemeSwitch() {
 
     // On client side load
     useEffect(()=>{
-        console.log("Found theme of "+localStorage.getItem("theme") as any || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
         setTheme(localStorage.getItem("theme") as any || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
     },[])
 
     useEffect(()=>{
         if (!theme) return;
-        console.log("Setting theme to "+theme)
         localStorage.setItem("theme", theme);
         if (theme == 'dark')
             document.documentElement.classList.add("dark")
