@@ -1,9 +1,14 @@
-import { apiHandler } from "@/utils/api";
+import { ApiError, apiHandler } from "@/utils/api";
+import { TokenBlacklist } from "@/utils/database";
 import { createJWTPair, verifyRefreshJWT } from "@/utils/jwt";
+import { HttpStatusCode } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 async function GET(req: NextApiRequest, res: NextApiResponse) {
     var {userId, jwtId} = verifyRefreshJWT(req.headers.authorization);
+
+    var count = await TokenBlacklist.count({where: {id: jwtId}})
+    if (count > 0) throw new ApiError("Invalid Auth Token", HttpStatusCode.Forbidden);
 
     var tokenPair = await createJWTPair(userId, jwtId);
 

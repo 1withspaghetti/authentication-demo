@@ -54,14 +54,14 @@ export async function createJWTPair(userId: number, jwtid: string): Promise<Auth
     })
 }
 
-export function verifyRefreshJWT(token?: string): {userId: number, jwtId: string} {
+export function verifyRefreshJWT(token?: string): {userId: number, jwtId: string, expires: number} {
     try {
         if (!token || !/^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$/.test(token)) throw "";
 
         var payload = jwt.verify(token, JWTPublicKey, {algorithms: ['ES512']}) as JwtPayload;
-        if (typeof payload.sub !== 'number' || typeof payload.jti !== 'string' || payload.use !== "REFRESH") throw "";
+        if (typeof payload.sub !== 'number' || typeof payload.jti !== 'string' || typeof payload.exp !== 'number' || payload.use !== "REFRESH") throw "";
 
-        return {userId: payload.sub, jwtId: payload.jti};
+        return {userId: payload.sub, jwtId: payload.jti, expires: payload.exp};
     } catch (err) {
         console.error(err);
         throw new ApiError("Invalid Auth Token", HttpStatusCode.Forbidden);

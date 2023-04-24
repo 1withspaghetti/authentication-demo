@@ -23,14 +23,14 @@ export default function App({ Component, pageProps }: AppProps) {
                     console.error(err);
                 }
             })
-        }, 120000); // 2 minutes
+        }, 12000); // 2 minutes
         return () => clearInterval(interval);
     }, []);
     
     return (
         <>
             <Head>
-                <title>Spaghetti Chat</title>
+                <title>{ pageProps.title ? `${pageProps.title} | Spaghetti Chat` : `Spaghetti Chat`}</title>
                 <meta name="description" content="TODO" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />

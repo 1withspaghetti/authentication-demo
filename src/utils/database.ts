@@ -39,6 +39,29 @@ User.init({
     }
 }, {sequelize: db});
 
+export class TokenBlacklist extends Model<InferAttributes<TokenBlacklist>, InferCreationAttributes<TokenBlacklist>> {
+    declare id: Buffer;
+    declare expires: Date;
+}
+TokenBlacklist.init({
+    id: {
+        type: DataTypes.BLOB,
+        primaryKey: true
+    },
+    expires: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+}, {
+    indexes: [{
+        unique: true,
+        fields: ['id']
+    }], 
+    sequelize: db,
+    timestamps: false,
+    freezeTableName: true
+});
+
 
 db.authenticate().then(()=>{
     db.sync({ alter: true }).then(()=>{

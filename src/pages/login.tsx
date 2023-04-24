@@ -57,3 +57,7 @@ export default function Login() {
         </>
     )
 }
+
+export function getStaticProps() {
+    return {props: {title: "Login"}}
+  }

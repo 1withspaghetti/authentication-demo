@@ -26,8 +26,8 @@ export default function SignUp() {
         setLoading(true);
         axios.post('/api/auth/signup', {email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
         .then((res)=>{
-            var token = res.data.token;
-            localStorage.setItem("token", token);
+            localStorage.setItem("refresh_token", res.data["refresh_token"]);
+            localStorage.setItem("resource_token", res.data["resource_token"]);
         }).catch((err: AxiosError<any, any>)=>{
             setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
         }).finally(()=>{setLoading(false)})
@@ -69,4 +69,8 @@ export default function SignUp() {
             </div>
         </>
     )
+}
+
+export function getStaticProps() {
+    return {props: {title: "Home"}}
 }
