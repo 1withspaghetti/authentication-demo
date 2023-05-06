@@ -21,7 +21,7 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="flex items-center h-11">
-            <Link href="/login" className="h-min rounded-lg shadow text-lg font-semibold mx-1 px-4 py-[2px] cursor-pointer transition-all text-navy-50 bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105">Login</Link>
+                <Link href="/login" className="h-min rounded-lg shadow text-lg font-semibold mx-1 px-4 py-[2px] cursor-pointer transition-all text-navy-50 bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105">Login</Link>
                 <ThemeSwitch></ThemeSwitch>
             </div>
         </div>

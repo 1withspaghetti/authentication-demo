@@ -1,11 +1,14 @@
 import FormInput from "@/components/FormInput";
 import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/context/AuthContext";
 import { SignUpValidator } from "@/types/authValidation";
 import axios, { AxiosError } from "axios";
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 
 export default function SignUp() {
+
+    const authContext = useContext(AuthContext);
 
     const email = useRef<FormInput>(null);
     const user = useRef<FormInput>(null);
@@ -26,8 +29,7 @@ export default function SignUp() {
         setLoading(true);
         axios.post('/api/auth/signup', {email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
         .then((res)=>{
-            localStorage.setItem("refresh_token", res.data["refresh_token"]);
-            localStorage.setItem("resource_token", res.data["resource_token"]);
+            authContext.updateAuth(res.data["refresh_token"], res.data["resource_token"]);
         }).catch((err: AxiosError<any, any>)=>{
             setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
         }).finally(()=>{setLoading(false)})
@@ -72,5 +74,5 @@ export default function SignUp() {
 }
 
 export function getStaticProps() {
-    return {props: {title: "Home"}}
+    return {props: {title: "Sign Up"}}
 }

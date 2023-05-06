@@ -1,11 +1,16 @@
 import FormInput from "@/components/FormInput";
 import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/context/AuthContext";
 import { LoginValidator } from "@/types/authValidation";
 import axios, { AxiosError } from "axios";
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 
 export default function Login() {
+
+    const authContext = useContext(AuthContext);
+
+    
 
     const user = useRef<FormInput>(null);
     const pass = useRef<FormInput>(null);
@@ -23,11 +28,10 @@ export default function Login() {
         setLoading(true);
         axios.post('/api/auth/login', {user: user.current.getValue(), pass: pass.current.getValue()})
         .then((res)=>{
-            localStorage.setItem("refresh_token", res.data["refresh_token"]);
-            localStorage.setItem("resource_token", res.data["resource_token"]);
+            authContext.updateAuth(res.data["refresh_token"], res.data["resource_token"]);
         }).catch((err: AxiosError<any, any>)=>{
             setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
-        }).finally(()=>{setLoading(false)})
+        }).finally(()=>{setLoading(false)});
     }
     
     return (
@@ -35,7 +39,7 @@ export default function Login() {
             <Navbar></Navbar>
             <div className="w-fill flex justify-center mt-8">
                 <div className="rounded-lg shadow-lg px-6 sm:px-16 py-4 bg-slate-200 dark:bg-slate-800">
-                    <h1 className="mb-4 text-2xl font-bold text-center">Login</h1>
+                    <h1 className="mb-4 text-2xl font-bold text-center" onClick={()=>{console.log(authContext.resourceToken)}}>Login</h1>
                     <form className="flex flex-col items-center" onSubmit={onSubmit}>
                         <FormInput ref={user} id="user" label="Username or Email" validator={LoginValidator.user} 
                             attr={{autoComplete: "username", autoFocus: true}}></FormInput>
