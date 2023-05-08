@@ -4,11 +4,13 @@ import { AuthContext } from "@/context/AuthContext";
 import { SignUpValidator } from "@/types/authValidation";
 import axios, { AxiosError } from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FormEvent, useContext, useRef, useState } from "react";
 
 export default function SignUp() {
 
     const authContext = useContext(AuthContext);
+    const router = useRouter();
 
     const email = useRef<FormInput>(null);
     const user = useRef<FormInput>(null);
@@ -30,6 +32,7 @@ export default function SignUp() {
         axios.post('/api/auth/signup', {email: email.current.getValue(), user: user.current.getValue(), pass: pass.current.getValue()})
         .then((res)=>{
             authContext.updateAuth(res.data["refresh_token"], res.data["resource_token"]);
+            router.push('/dashboard');
         }).catch((err: AxiosError<any, any>)=>{
             setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
         }).finally(()=>{setLoading(false)})
@@ -37,7 +40,6 @@ export default function SignUp() {
     
     return (
         <>
-            <Navbar></Navbar>
             <div className="w-fill flex justify-center mt-8">
                 <div className="rounded-lg shadow-lg px-6 sm:px-16 py-4 bg-slate-200 dark:bg-slate-800">
                     <h1 className="mb-4 text-2xl font-bold text-center">Sign Up</h1>

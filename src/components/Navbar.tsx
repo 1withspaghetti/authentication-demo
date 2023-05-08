@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function Navbar() {
 
     var [open, setOpen] = useState<boolean>(false);
+
+    var authContext = useContext(AuthContext);
     
     return (
         <div className='sticky top-0 left-0 right-0 bg-slate-200 dark:bg-slate-800 shadow-lg flex justify-between'>
@@ -21,7 +24,12 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="flex items-center h-11">
-                <Link href="/login" className="h-min rounded-lg shadow text-lg font-semibold mx-1 px-4 py-[2px] cursor-pointer transition-all text-navy-50 bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105">Login</Link>
+                { authContext.awaitAuth ? '' :
+                ( authContext.loggedIn ?
+                    <div tabIndex={0} onClick={authContext.logout} title="Log out of current account" className="h-min text-lg font-semibold mx-1 px-2 py-[2px] cursor-pointer transition-all text-red-500">Logout</div>
+                :
+                    <Link href="/login" className="h-min rounded-lg shadow text-lg font-semibold mx-1 px-4 py-[2px] cursor-pointer transition-all text-navy-50 bg-blue-500 dark:bg-blue-700 hover:shadow-lg hover:scale-105">Login</Link>
+                )}
                 <ThemeSwitch></ThemeSwitch>
             </div>
         </div>
