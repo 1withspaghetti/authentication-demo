@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -14,7 +13,7 @@ export default function Dashboard() {
 
     useEffect(()=>{
         if (!authContext.awaitAuth && !authContext.loggedIn) router.push('/login');
-    });
+    }, [authContext]);
 
     useEffect(()=>{
         if (authContext.awaitAuth || !authContext.loggedIn || data) return;

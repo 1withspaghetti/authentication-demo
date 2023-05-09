@@ -7,8 +7,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 async function GET(req: NextApiRequest, res: NextApiResponse) {
     var {userId, jwtId} = verifyRefreshJWT(req.headers.authorization);
 
-    var count = await TokenBlacklist.count({where: {id: jwtId}})
-    if (count > 0) throw new ApiError("Invalid Auth Token", HttpStatusCode.Forbidden);
+    var count = await TokenBlacklist.count({where: {id: Buffer.from(jwtId,'hex')}});
+    if (count > 0) throw new ApiError("Invalid Auth Token", HttpStatusCode.Unauthorized);
 
     var tokenPair = await createJWTPair(userId, jwtId);
 

@@ -41,7 +41,7 @@ User.init({
 
 export class TokenBlacklist extends Model<InferAttributes<TokenBlacklist>, InferCreationAttributes<TokenBlacklist>> {
     declare id: Buffer;
-    declare expires: Date;
+    declare expires: number;
 }
 TokenBlacklist.init({
     id: {
@@ -49,7 +49,7 @@ TokenBlacklist.init({
         primaryKey: true
     },
     expires: {
-        type: DataTypes.DATE,
+        type: DataTypes.BIGINT.UNSIGNED,
         allowNull: true
     }
 }, {

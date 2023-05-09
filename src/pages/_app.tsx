@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 localStorage.setItem("session_token", res.data["refresh_token"]);
             }).catch((err: AxiosError<any, any>)=>{
                 if (tokensUpdated) return;
-                if (err.status == 401) {
+                if (err.response?.status == 401) {
                     setLoggedIn(false);
                     refreshToken = undefined;
                     setResourceToken(undefined);
@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
             });
         } else setAwaitAuth(false);
 
-        const interval = setInterval(updateTokens, 120000);
+        const interval = setInterval(updateTokens, 12000);
         return () => clearInterval(interval);
     }, []);
 
@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps) {
         try {
             await axios.get("/api/auth/logout", {headers: {"Authorization": refreshToken}});
         } catch (err) {
-            if (!(err instanceof AxiosError) || err.status != 403) throw err;
+            if (!(err instanceof AxiosError) || err.status != 401) throw err;
         }
         setLoggedIn(false);
         refreshToken = undefined;

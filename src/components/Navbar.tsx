@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
 import { AuthContext } from "@/context/AuthContext";

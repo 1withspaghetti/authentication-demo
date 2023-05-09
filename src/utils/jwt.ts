@@ -64,7 +64,7 @@ export function verifyRefreshJWT(token?: string): {userId: number, jwtId: string
         return {userId: payload.sub, jwtId: payload.jti, expires: payload.exp};
     } catch (err) {
         console.error(err);
-        throw new ApiError("Invalid Auth Token", HttpStatusCode.Forbidden);
+        throw new ApiError("Invalid Auth Token", HttpStatusCode.Unauthorized);
     }
 }
 
@@ -78,6 +78,6 @@ export function verifyResourceJWT(token?: string): number {
         return payload.sub;
     } catch (err) {
         console.error(err);
-        throw new ApiError("Invalid Auth Token", HttpStatusCode.Forbidden);
+        throw new ApiError("Invalid Auth Token", HttpStatusCode.Unauthorized);
     }
 }
