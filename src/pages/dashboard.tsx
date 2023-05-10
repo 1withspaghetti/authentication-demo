@@ -13,6 +13,7 @@ export default function Dashboard() {
 
     useEffect(()=>{
         if (!authContext.awaitAuth && !authContext.loggedIn) router.push('/login');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authContext]);
 
     useEffect(()=>{

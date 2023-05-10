@@ -66,6 +66,12 @@ TokenBlacklist.init({
 db.authenticate().then(()=>{
     db.sync({ alter: true }).then(()=>{
         console.log('Database has been connected!');
+
+        setInterval(()=>{
+            TokenBlacklist.destroy({where: {expires: { $lt: Date.now() }}}).catch((err)=>{
+                console.error("Error removing expired jwt ids: ", err);
+            })
+        }, 60000);
     });
 }).catch((err)=>{
     console.log('Could not connect to database: ', err)
