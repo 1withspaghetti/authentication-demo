@@ -12,8 +12,7 @@ export default function Dashboard() {
     const [data, setData] = useState<any>();
 
     useEffect(()=>{
-        if (!authContext.awaitAuth && !authContext.loggedIn) router.push('/login');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (!authContext.awaitAuth && !authContext.loggedIn) router.push('/login?url='+router.route);
     }, [authContext]);
 
     useEffect(()=>{
@@ -22,7 +21,7 @@ export default function Dashboard() {
         axios.get('/api/hello', {headers: {Authorization: authContext.resourceToken}}).then(res=>{
             setData(res.data);
         })
-    }, [authContext, data])
+    }, [authContext.awaitAuth]);
 
     if (data) return (
         <>

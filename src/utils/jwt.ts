@@ -4,6 +4,9 @@ import { ApiError } from './api';
 import { HttpStatusCode } from 'axios';
 import crypto from 'crypto';
 
+export const REFRESH_JWT_EXPIRE_TIME = 604800000;
+export const RESOURCE_JWT_EXPIRE_TIME = 130000;
+
 var JWTPublicKey: string = "";
 var JWTPrivateKey: string = "";
 
@@ -42,10 +45,10 @@ export async function createJWTPair(userId: number, jwtid: string): Promise<Auth
     if (!JWTPrivateKey) throw new Error("Could not sign JWT, due to lack of keys, run 'npm run keygen' to create new keys");
     return new Promise<AuthTokenPair>((resolve, reject)=>{
         // Violation of https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.2 teeheehee
-        jwt.sign({sub: userId, use: "REFRESH"}, JWTPrivateKey, {algorithm: 'ES512', expiresIn: "7d", jwtid}, (err, refreshJWT)=>{
+        jwt.sign({sub: userId, use: "REFRESH"}, JWTPrivateKey, {algorithm: 'ES512', expiresIn: REFRESH_JWT_EXPIRE_TIME/1000, jwtid}, (err, refreshJWT)=>{
             if (err || !refreshJWT) return reject(err);
 
-            jwt.sign({sub: userId, use: "RESOURCE"}, JWTPrivateKey, {algorithm: 'ES512', expiresIn: "2.1m"}, (err, resourceJWT)=>{
+            jwt.sign({sub: userId, use: "RESOURCE"}, JWTPrivateKey, {algorithm: 'ES512', expiresIn: RESOURCE_JWT_EXPIRE_TIME/1000}, (err, resourceJWT)=>{
                 if (err || !resourceJWT) return reject(err);
 
                 resolve({"refresh_token": refreshJWT, "resource_token": resourceJWT});

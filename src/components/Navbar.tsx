@@ -11,7 +11,7 @@ export default function Navbar() {
     
     return (
         <div className='sticky top-0 left-0 right-0 bg-slate-200 dark:bg-slate-800 shadow-lg flex justify-between'>
-            <div className={`flex flex-col sm:flex-row overflow-hidden transition-all sm:h-12`} style={{maxHeight: `${open ? 48 + 44 * 2/*<- The number to additional nav buttons */ : 48}px`}}>
+            <div className={`flex flex-col sm:flex-row overflow-hidden transition-all sm:h-11`} style={{maxHeight: `${open ? 44 + 44 * 2/*<- The number to additional nav buttons */ : 44}px`}}>
                 <div className="flex">
                     <Link href="/" className="text-xl whitespace-nowrap font-bold px-5 pt-2 pb-1 cursor-pointer transition-[border-color] border-slate-200 dark:border-slate-800 border-b-4 bg-slate-200 hover:border-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:hover:border-blue-700 dark:focus:border-blue-700">Website Name</Link>
                 </div>

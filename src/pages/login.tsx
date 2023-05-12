@@ -28,7 +28,7 @@ export default function Login() {
         axios.post('/api/auth/login', {user: user.current.getValue(), pass: pass.current.getValue()})
         .then((res)=>{
             authContext.updateAuth(res.data["refresh_token"], res.data["resource_token"]);
-            router.push('/dashboard');
+            router.push(typeof router.query.url === 'string' ? router.query.url : '/dashboard');
         }).catch((err: AxiosError<any, any>)=>{
             setError(err.response?.data.error || (err.response?.status + " " + err.response?.statusText))
         }).finally(()=>{setLoading(false)});
