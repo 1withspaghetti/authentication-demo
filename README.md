@@ -1,6 +1,7 @@
-# Spaghetti Chat
+# Authentication Demo
 
-Simple chat app built with [Next.js](https://nextjs.org/) and [tailwindcss](https://tailwindcss.com/)
+[JWT](https://jwt.io/) token authentication demo with [Next.js](https://nextjs.org/) and [tailwindcss](https://tailwindcss.com/)
+Includes sign-up, login, token refresh, logout, and user data fetch. All possible without ever saving tokens on the backend.
 
 ## Running the dev server
 

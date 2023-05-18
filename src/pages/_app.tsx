@@ -85,7 +85,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <AuthContext.Provider value={{loggedIn, resourceToken, awaitAuth, updateAuth: setTokens, logout}}>
             <Head>
-                <title>{ pageProps.title ? `${pageProps.title} | Spaghetti Chat` : `Spaghetti Chat`}</title>
+                <title>{ pageProps.title ? `${pageProps.title} | Website Name` : `Website Name`}</title>
                 <meta name="description" content="TODO" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
