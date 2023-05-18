@@ -1,6 +1,6 @@
 import { SignUpValidator } from "@/types/authValidation";
 import { ApiError, apiHandler } from "@/utils/api";
-import { User } from "@/utils/database";
+import { User } from "@/utils/db/userDatabase";
 import { NextApiRequest, NextApiResponse } from "next";
 import { object } from "yup";
 import crypto from 'crypto';

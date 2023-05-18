@@ -1,6 +1,6 @@
 import { LoginValidator } from "@/types/authValidation";
 import { ApiError, apiHandler } from "@/utils/api";
-import { User } from "@/utils/database";
+import { User } from "@/utils/db/userDatabase";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Op } from "sequelize";
 import { object } from "yup";

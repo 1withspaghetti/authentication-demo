@@ -1,5 +1,5 @@
 import { ApiError, apiHandler } from "@/utils/api";
-import { TokenBlacklist } from "@/utils/database";
+import { TokenBlacklist } from "@/utils/db/userDatabase";
 import { createJWTPair, verifyRefreshJWT } from "@/utils/jwt";
 import { HttpStatusCode } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";

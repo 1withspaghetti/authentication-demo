@@ -3,6 +3,18 @@ import { DataTypes, InferAttributes, InferCreationAttributes, Model, Sequelize }
 if (!process.env.DATABASE_URL) console.warn("No DATABASE_URL provided, defaulting to sqlite://data.db")
 const db = new Sequelize(process.env.DATABASE_URL || "sqlite://data.db", {logging: false});
 
+(async () => {
+    await db.authenticate();
+    await db.sync({ alter: true });
+
+    console.log('User SQL Database has been connected');
+    setInterval(()=>{
+        TokenBlacklist.destroy({where: {expires: { $lt: Date.now() }}}).catch((err)=>{
+            console.error("Error removing expired jwt ids: ", err);
+        })
+    }, 60000);
+})();
+
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id: number;
     declare email: string;
@@ -61,18 +73,3 @@ TokenBlacklist.init({
     timestamps: false,
     freezeTableName: true
 });
-
-
-db.authenticate().then(()=>{
-    db.sync({ alter: true }).then(()=>{
-        console.log('Database has been connected!');
-
-        setInterval(()=>{
-            TokenBlacklist.destroy({where: {expires: { $lt: Date.now() }}}).catch((err)=>{
-                console.error("Error removing expired jwt ids: ", err);
-            })
-        }, 60000);
-    });
-}).catch((err)=>{
-    console.log('Could not connect to database: ', err)
-})

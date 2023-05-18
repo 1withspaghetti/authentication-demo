@@ -42,7 +42,7 @@ export type AuthTokenPair = {
 }
 
 export async function createJWTPair(userId: number, jwtid: string): Promise<AuthTokenPair> {
-    if (!JWTPrivateKey) throw new Error("Could not sign JWT, due to lack of keys, run 'npm run keygen' to create new keys");
+    if (!JWTPrivateKey) throw new Error("Could not sign JWT, due to lack of a private key.");
     return new Promise<AuthTokenPair>((resolve, reject)=>{
         // Violation of https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.2 teeheehee
         jwt.sign({sub: userId, use: "REFRESH"}, JWTPrivateKey, {algorithm: 'ES512', expiresIn: REFRESH_JWT_EXPIRE_TIME/1000, jwtid}, (err, refreshJWT)=>{

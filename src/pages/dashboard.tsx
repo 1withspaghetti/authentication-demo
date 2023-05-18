@@ -25,7 +25,7 @@ export default function Dashboard() {
 
     if (data) return (
         <>
-            TODO - Login protected page with data: {JSON.stringify(data)}
+            TODO - Hello, {data.name}
         </>
     );
     return (
